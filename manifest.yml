@@ -1,0 +1,13 @@
+---
+applications:
+- name: pibot
+  host: pibot-pibot
+  memory: 256M
+  path: ./
+  services:
+  - redis
+  - papertrail
+  env:
+    HUBOT_CAMPFIRE_ACCOUNT: myaccount
+    HUBOT_CAMPFIRE_TOKEN: mytoken
+    HUBOT_CAMPFIRE_ROOMS: myroom1, myroom2, myroom3
