@@ -6,8 +6,11 @@ applications:
   path: ./
   services:
   - redis
-  - papertrail
   env:
-    HUBOT_CAMPFIRE_ACCOUNT: myaccount
-    HUBOT_CAMPFIRE_TOKEN: mytoken
-    HUBOT_CAMPFIRE_ROOMS: myroom1, myroom2, myroom3
+    HUBOT_HIPCHAT_JID: hipchat_jid
+    HUBOT_HIPCHAT_PASSWORD: hipchat_password
+    HUBOT_HIPCHAT_ROOMS: hipchat_rooms
+
+    HUBOT_ZENDESK_USER: zendesk_user
+    HUBOT_ZENDESK_PASSWORD: zendesk_password
+    HUBOT_ZENDESK_SUBDOMAIN: zendesk_subdomain
