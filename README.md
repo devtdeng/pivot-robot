@@ -1,7 +1,7 @@
-# pibot
+# Pivot
 
 ## Deployment
-- $ git clone https://github.com/devtdeng/pibot.git
+- $ git clone https://github.com/devtdeng/pivot.git
 - $ cd pibot
 - Configure hipchat/zendesk login manifest.yml with valid info
 - $ cf login -a api.run.pivotal.io -u <user> -p <password> -o <org> -s <space>
