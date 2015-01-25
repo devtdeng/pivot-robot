@@ -1,1 +1,1 @@
-web: bin/hubot -a hipchat -n pibot
+web: bin/hubot -a hipchat -n pivot
