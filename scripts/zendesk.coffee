@@ -128,20 +128,17 @@ module.exports = (robot) ->
   #     console.log('Unable to read file', error)
 
 
-  # add comment to special ticket
+  # FIX ME
+  # add comment to special ticket, this doesn't work well now.
   # add comment <ticket id> <comment>
-  #
-curl https://{subdomain}.zendesk.com/api/v2/tickets/{id}.json \
-  -H "Content-Type: application/json" \
-  -d '{"ticket": {"status": "solved", "comment": {"public": true, "body": "Thanks, this is now solved!"}}}' \
-  -v -u {email_address}:{password} -X PUT
-
-  robot.respond /add comment ([\d]+) (.*)$/i, (msg) ->
-    ticket_id = msg.match[1]
-    comment = msg.match[2]
-    # TODO
-    zendesk_request_put msg, data, "#{ticket_queries.tickets}#{ticket_id}", (results) ->
-
+  # curl https://{subdomain}.zendesk.com/api/v2/tickets/{id}.json \
+  #   -H "Content-Type: application/json" \
+  #   -d '{"ticket": {"status": "solved", "comment": {"public": true, "body": "Thanks, this is now solved!"}}}' \
+  #   -v -u {email_address}:{password} -X PUT
+  # robot.respond /add comment ([\d]+) (.*)$/i, (msg) ->
+  #   ticket_id = msg.match[1]
+  #   comment = msg.match[2]
+  #   zendesk_request_put msg, data, "#{ticket_queries.tickets}#{ticket_id}", (results) ->
 
   # search articles with keyword
   # search articles <keyword>
