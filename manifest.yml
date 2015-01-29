@@ -2,7 +2,7 @@
 applications:
 - name: pivot
   host: pivot-${random-word}
-  memory: 256M
+  memory: 1G
   path: ./
   services:
   - redis
