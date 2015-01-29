@@ -71,8 +71,8 @@ zendesk_request_get = (msg, url, handler) ->
           msg.send "Zendesk says: #{err}"
           return
 
+        console.log "http response: #{body}"
         content = JSON.parse(body)
-        console.log "http response: #{content}"
 
         if content.error?
           if content.error?.title
