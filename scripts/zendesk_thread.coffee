@@ -35,28 +35,36 @@ zendesk_request_get = (url, handler) ->
 module.exports = (robot) ->
   cronJob = require('cron').CronJob
   robot_global = robot
-  # tz = 'America/Los_Angeles'
-  new cronJob('0 * * * * *', everyOneMinute, null, true)
+
+  # new cronJob('0 * * * * *', everyOneMinute, null, true)
   new cronJob('0 */15 * * * 1-5', workdays15Minutes, null, true)
 
 # This is the actual check interval
-workdays15Minutes = ->
-  console.log 'working day, every 15 minute'
-  robot_global.messageRoom room, 'working day, every 15 minutes'
+workdays5Minutes = ->
+  console.log 'working day, every 15 minutes'
+
+  message = ""
+  zendesk_request_get "search.json?query=status:new+type:ticket", (results) ->
+    if results.count < 1
+      # no new tickets
+      return
+    for result in results.results
+      message += "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}\n"
+    robot_global.messageRoom room, message
+
 
 # This is the check interval for demo
-everyOneMinute = ->
-  console.log 'every day, every 1 minute'
-  robot_global.messageRoom room, 'every day, every 1 minute'  
+# everyOneMinute = ->
+#   console.log 'every day, every 1 minute'
 
-  # because in most time, there are no new tickets, use pending/open for test 
-  zendesk_request_get "search.json?query=status:new+type:ticket", (results) ->
-    for result in results.results
-      # TODO: There is error here, not able to 
-      robot_global.messageRoom room "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}"
-
-
-
+#   message = ""
+#   zendesk_request_get "search.json?query=status:new+type:ticket", (results) ->
+#     if results.count < 1
+#       # no new tickets
+#       return
+#     for result in results.results
+#       message += "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}\n"
+#     robot_global.messageRoom room, message
 
 
 
