@@ -8,33 +8,26 @@
 #   HUBOT_ZENDESK_SUBDOMAIN
 #
 # Commands:
-#   hubot (all) tickets - returns the total count of all unsolved tickets. The 'all' keyword is optional.
-#   hubot new tickets - returns the count of all new (unassigned) tickets
-#   hubot open tickets - returns the count of all open tickets
-#   hubot escalated tickets - returns a count of tickets with escalated tag that are open or pending
-#   hubot pending tickets - returns a count of tickets that are pending
-#   hubot list (all) tickets - returns a list of all unsolved tickets. The 'all' keyword is optional.
-#   hubot list new tickets - returns a list of all new tickets
-#   hubot list open tickets - returns a list of all open tickets
-#   hubot list pending tickets - returns a list of pending tickets
-#   hubot list escalated tickets - returns a list of escalated tickets
-#   hubot ticket <ticket id> - returns information about the specified ticket with comments
-#   hubot search articles <query>- search zendesk articles with provided query string
-#   hubot search tickets <query>- search zendesk tickets with provided query string
-#   hubot add comment <ticket id> <comments> - add internal comment to tickets, this won't be sent to customers
-#   hubot reserve - this is reserved commands
-#   hubot reserve - this is reserved commands
-#   hubot reserve - this is reserved commands
-#   hubot reserve - this is reserved commands
-#   hubot reserve - this is reserved commands
-#   hubot reserve - this is reserved commands
+#   pivot (all) tickets - returns the total count of all unsolved tickets. The 'all' keyword is optional.
+#   pivot new tickets - returns the count of all new (unassigned) tickets
+#   pivot open tickets - returns the count of all open tickets
+#   pivot escalated tickets - returns a count of tickets with escalated tag that are open or pending
+#   pivot pending tickets - returns a count of tickets that are pending
+#   pivot list (all) tickets - returns a list of all unsolved tickets. The 'all' keyword is optional.
+#   pivot list new tickets - returns a list of all new tickets
+#   pivot list open tickets - returns a list of all open tickets
+#   pivot list pending tickets - returns a list of pending tickets
+#   pivot list escalated tickets - returns a list of escalated tickets
+#   pivot ticket <ticket id> - returns information about the specified ticket with comments
+#   pivot search articles <query>- search zendesk articles with provided query string
+#   pivot search tickets <query>- search zendesk tickets with provided query string
+#   pivot add comment <ticket id> <comments> - add internal comment to tickets, this won't be sent to customers
 
 
-
-
-sys = require 'sys' # Used for debugging
-fs   = require 'fs'
-path = require 'path'
+# Used for debugging
+#sys = require 'sys'
+#fs   = require 'fs'
+#path = require 'path'
 
 
 # Ticket search
@@ -84,6 +77,7 @@ zendesk_request_get = (msg, url, handler) ->
         handler content
 
 
+TODO: Complete this to post data to zendesk, need to use while posting comments
 zendesk_request_put = (msg, url, data, handler) ->
   zendesk_user = "#{process.env.HUBOT_ZENDESK_USER}"
   # zendesk_password = "#{process.env.HUBOT_ZENDESK_PASSWORD}"
@@ -105,7 +99,8 @@ zendesk_request_put = (msg, url, data, handler) ->
         msg.send "not implemented yet"
 
 
-# FIXME this works about as well as a brick floats
+# TODO: implement this to find out the user or email to use while posting
+# internal message to tickets
 zendesk_user = (msg, user_id) ->
   zendesk_request_get msg, "#{queries.users}/#{user_id}.json", (result) ->
     if result.error
@@ -114,9 +109,11 @@ zendesk_user = (msg, user_id) ->
     result.user
 
 module.exports = (robot) ->
+
   # App home page, this is not must
   # http://pivot-${random-word}.cfapps.io/
-  #
+  # may be replace this with gh-pages later
+
   robot.router.get '/', (req, res) ->
     indexfile = '#{__dirname}public/index.html'
     try
@@ -127,12 +124,13 @@ module.exports = (robot) ->
       console.log('Unable to read file', error)
 
 
-  # add comment to special ticket, this doesn't work well now.
+  # TODO: add comment to special ticket, this doesn't work well now.
   # add comment <ticket id> <comment>
   # curl https://{subdomain}.zendesk.com/api/v2/tickets/{id}.json \
   #   -H "Content-Type: application/json" \
   #   -d '{"ticket": {"status": "solved", "comment": {"public": true, "body": "Thanks, this is now solved!"}}}' \
   #   -v -u {email_address}:{password} -X PUT
+
   robot.respond /add comment ([\d]+) (.*)$/i, (msg) ->
     ticket_id = msg.match[1]
     comment = msg.match[2]
@@ -140,6 +138,7 @@ module.exports = (robot) ->
     # zendesk_request_put msg, data, "#{ticket_queries.tickets}#{ticket_id}", (results) ->
     #   if result.error
     #     msg.send result.description
+
 
   # search articles with keyword
   # search articles <keyword>
@@ -243,3 +242,5 @@ module.exports = (robot) ->
         message += "body: #{result.body}\n\n"
 
     msg.send message
+
+    

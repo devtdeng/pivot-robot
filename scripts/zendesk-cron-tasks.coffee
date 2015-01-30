@@ -65,6 +65,3 @@ workdays5Minutes = ->
 #     for result in results.results
 #       message += "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}\n"
 #     robot_global.messageRoom room, message
-
-
-
