@@ -20,7 +20,7 @@
 #   pivot ticket <ticket id> - returns information about the specified ticket with comments
 #   pivot search articles <query> - search zendesk articles with provided query string
 #   pivot search tickets <query> - search zendesk tickets with provided query string
-#   pivot comment <ticket id> <comments> - add internal comment to tickets, this won't be sent to customers
+#   pivot comment <ticket id> <comments> - add internal comment to tickets, this won't be sent to submitter
 #   pivot translate <ticket id> - translate tickets into English if it's other in languages
 
 # Ticket search
@@ -67,7 +67,7 @@ zendesk_request_get = (msg, url, handler) ->
 
         handler content
 
-# TODO: Complete this to post data to zendesk, need to use while posting comments
+# GET /api/v2/..., make sure header is configured as application/json.
 zendesk_request_put = (msg, url, data, handler) ->
   zendesk_user = "#{process.env.HUBOT_ZENDESK_USER}"
   zendesk_apitoken = "#{process.env.HUBOT_ZENDESK_APITOKEN}"
@@ -76,16 +76,27 @@ zendesk_request_put = (msg, url, data, handler) ->
 
   console.log "http request: #{zendesk_url}/#{url}"
 
+  json = JSON.stringify(data)
   msg.http("#{zendesk_url}/#{url}")
-    .headers(Authorization: "Basic #{auth}", Accept: "application/json")
-      .put(data) (err, res, body) ->
-        if err
-          msg.send "Zendesk says: #{err}"
-          return
-        # TODO
-        msg.send "comment is added to ticket"
+    .headers(Authorization: "Basic #{auth}", Accept: "application/json", "Content-Type": "application/json")
+    .put(json) (err, res, body) ->
+      if err
+        msg.send "Zendesk says: #{err}"
+        return
 
-# TODO: implement this to find out the user or email to use while posting
+      console.log "http response: #{body}"
+      content = JSON.parse(body)
+
+      if content.error?
+        if content.error?.title
+          msg.send "Zendesk says: #{content.error.title}"
+        else
+          msg.send "Zendesk says: #{content.error}"
+        return
+
+      handler content
+
+# implement this to find out the user or email to use while posting
 # internal message to tickets
 zendesk_user = (msg, user_id) ->
   zendesk_request_get msg, "#{queries.users}/#{user_id}.json", (result) ->
@@ -142,20 +153,26 @@ module.exports = (robot) ->
   robot.respond /suggest ([\d]+)$/i, (msg) ->
     ticketid = msg.match[1]
     msg.send "not implemented yet"
-    # TODO
     # step 1: get ticket title
     # step 2: search articles
     # step 3: search tickets (exclude this ticket)
 
-  # TODO: add comment to special ticket, this doesn't work well now.
+  # Add internal comment to special ticket
   # comment <ticket id> <comment>
   robot.respond /comment ([\d]+) (.*)$/i, (msg) ->
     ticket_id = msg.match[1]
-    comment = msg.match[2]
-    msg.send "not implemented yet"
-    # zendesk_request_put msg, data, "#{ticket_queries.tickets}#{ticket_id}", (results) ->
-    #   if result.error
-    #     msg.send result.description
+    comment = "Comment from #{msg.message.user.name}:\n #{msg.match[2]}"
+    data =
+      ticket:
+        comment:
+          public: false,
+          body: comment
+
+    zendesk_request_put msg, "#{ticket_queries.tickets}/#{ticket_id}.json", data, (result) ->
+      if result.error?
+        return
+      else
+        msg.send "Added comment to Zendesk successfully"
 
   # show ticket description as well as comment
   # ticket <ticket id>
@@ -182,7 +199,7 @@ module.exports = (robot) ->
 
         msg.send message
 
-  # FIXME: translate a ticket into English if it is not
+  # translate a ticket into English if it is not
   # translate <ticket id>
   robot.respond /translate ([\d]+)$/i, (msg) ->
     ticket_id = msg.match[1]
