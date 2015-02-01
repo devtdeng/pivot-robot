@@ -7,11 +7,10 @@
   "dependencies": {
     "hubot": "^2.11.0",
     "hubot-diagnostics": "0.0.1",
-    "hubot-google-translate": "^0.1.0",
     "hubot-help": "^0.1.1",
     "hubot-scripts": "^2.5.16",
     "hubot-hipchat": "^2.7.5",
-    "cron":"*"
+    "cron":"^1.0.6"
     },
   "engines": {
     "node": "0.10.x"

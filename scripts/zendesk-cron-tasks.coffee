@@ -36,32 +36,22 @@ module.exports = (robot) ->
   cronJob = require('cron').CronJob
   robot_global = robot
 
-  # new cronJob('0 * * * * *', everyOneMinute, null, true)
-  new cronJob('0 */15 * * * 1-5', workdays15Minutes, null, true)
+  # since the demo is lese than 3 minutes, set interval as 1 minute
+  # Will create new ticket during the demo
+  new cronJob('0 * * * * *', checknewticket, null, true)
+  # new cronJob('0 */5 * * * 1-5', checknewticket, null, true)
 
-# This is the actual check interval
-workdays5Minutes = ->
-  console.log 'working day, every 15 minutes'
+checknewticket = ->
+  console.log 'checknewticket invoked'
 
-  message = ""
   zendesk_request_get "search.json?query=status:new+type:ticket", (results) ->
     if results.count < 1
-      # no new tickets
+      # no new tickets, don't send message to chat room
       return
+
+    message = "There is #{results.count} new ticket(s)\n"
     for result in results.results
-      message += "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}\n"
+      message += "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id} created at #{result.created_at}\n #{result.subject}\n"
     robot_global.messageRoom room, message
 
 
-# This is the check interval for demo
-# everyOneMinute = ->
-#   console.log 'every day, every 1 minute'
-
-#   message = ""
-#   zendesk_request_get "search.json?query=status:new+type:ticket", (results) ->
-#     if results.count < 1
-#       # no new tickets
-#       return
-#     for result in results.results
-#       message += "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}\n"
-#     robot_global.messageRoom room, message
