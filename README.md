@@ -5,7 +5,6 @@
 - $ cd pivot
 - Configure hipchat/zendesk login manifest.yml with valid info
 - $ cf login -a api.run.pivotal.io -u <user> -p <password> -o <org> -s <space>
-- $ cf create-service rediscloud 25mb redis
 - $ cf push
 
 ## Test
