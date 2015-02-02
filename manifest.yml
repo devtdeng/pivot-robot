@@ -4,7 +4,6 @@ applications:
   host: pivot-${random-word}
   memory: 1G
   path: ./
-  services:
   env:
     HUBOT_HIPCHAT_JID: hipchat_jid
     HUBOT_HIPCHAT_PASSWORD: hipchat_password
