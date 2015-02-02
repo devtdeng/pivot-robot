@@ -295,3 +295,19 @@ module.exports = (robot) ->
       msg.send "There are #{results.count} open tickets. \n ----------------------------- \n"
       for result in results.results
         msg.send "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}  #{result.subject}"
+
+  # Open ticket information if someone mentioned ticket #ticket_id in the chat room
+  robot.hear /ticket #([\d]+)$/i, (msg) ->
+    ticket_id = msg.match[1]
+    message = ""
+    zendesk_request_get msg, "#{ticket_queries.tickets}/#{ticket_id}.json", (result) ->
+      if result.error
+        msg.send result.description
+        return
+
+      message += "#{tickets_url}/#{result.ticket.id} (#{result.ticket.status.toUpperCase()})"
+      message += "\nUPDATED: #{result.ticket.updated_at}"
+      message += "\nCREATED: #{result.ticket.created_at}"
+      message += "\nSUBJECT: #{result.ticket.subject}"
+
+      msg.send message
