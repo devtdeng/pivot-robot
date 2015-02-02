@@ -311,3 +311,10 @@ module.exports = (robot) ->
       message += "\nSUBJECT: #{result.ticket.subject}"
 
       msg.send message
+
+
+  #Welcome greeting on entry to support room
+  robot.enter (msg) ->
+    if robot.name != msg.message.user.name
+      message = "#{msg.message.user.name}, Welcome to support room"
+      robot.messageRoom process.env.HUBOT_HIPCHAT_ROOMS, message    
