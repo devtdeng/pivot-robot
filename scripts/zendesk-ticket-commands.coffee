@@ -148,6 +148,18 @@ module.exports = (robot) ->
     catch error
       console.log('Unable to read file', error)
 
+  #This is for the ascii art, not getting a suitable art so keeping it disabled
+  #robot.router.get '/ascii.txt', (req, res) ->
+  #  fs = require 'fs'
+  #  indexfile = "#{__dirname}/public/ascii.txt"
+  #  try
+  #    data = fs.readFileSync indexfile, 'utf-8'
+  #    if data
+  #      res.end(data)
+  #  catch error
+  #    console.log('Unable to read file', error)
+
+
   # TODO: return tickets and articles help to resolve the ticket
   # suggest <ticket id>
   robot.respond /suggest ([\d]+)$/i, (msg) ->
@@ -296,6 +308,20 @@ module.exports = (robot) ->
       for result in results.results
         msg.send "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}  #{result.subject}"
 
+
+  # introduce
+  robot.respond /introduce$/i, (msg) ->
+  #  msg.http("http://pivot-hipchat.cfapps.io/ascii.txt")
+  #     .get() (err, res, body) ->
+  #       msg.send body
+    message =  "***************************************************\n"
+    message += "I'm Pivot a.k.a PIVotal robOT and\n"
+    message += "I am at your service to get anything from zendesk\n"
+    message += "***************************************************"
+
+    msg.send message
+
+
   # Open ticket information if someone mentioned ticket #ticket_id in the chat room
   robot.hear /ticket #([\d]+)$/i, (msg) ->
     ticket_id = msg.match[1]
@@ -317,4 +343,4 @@ module.exports = (robot) ->
   robot.enter (msg) ->
     if robot.name != msg.message.user.name
       message = "#{msg.message.user.name}, Welcome to support room"
-      robot.messageRoom process.env.HUBOT_HIPCHAT_ROOMS, message    
+      robot.messageRoom process.env.HUBOT_HIPCHAT_ROOMS, message
