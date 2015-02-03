@@ -38,7 +38,7 @@ ticket_queries =
   tickets: "tickets"
   users: "users"
   keyword: "search.json?query=subject:"
-  afterdate: "search.json?query=created>"
+  afterdate: "search.json?query=type:ticket+created>"
 
 # Article search
 # GET /api/v2/help_center/articles/search.json?query={search_string}
@@ -135,7 +135,7 @@ group_tickets = (msg, results) ->
       name = user_json.user.name
       value = assigned_tickets[user_json.user.id]
       msg.send "#{name}: #{value} tickets"
-      
+
 # translate ticket comment to English
 google_translate = (msg, comment_id, message) ->
   new_message = message.replace(/\n/g, "<return>")
@@ -365,11 +365,11 @@ module.exports = (robot) ->
 
   # introduce
   robot.respond /introduce$/i, (msg) ->
-    message = "***************************************************\n"
+    message = "******************************************************\n"
     message += "I'm Pivot a.k.a PIVotal robOT and\n"
     message += "I am at your service to get anything from Zendesk\n"
-    message += "Ask 'pivot help' for supported commands!\n"
-    message += "***************************************************"
+    message += "Ask 'pivot help' for supported commands\n"
+    message += "******************************************************"
     msg.send message
 
   # Open ticket information if someone mentioned ticket #ticket_id in the chat room
