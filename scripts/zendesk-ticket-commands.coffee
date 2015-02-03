@@ -22,7 +22,7 @@
 #   pivot search tickets <query> - search zendesk tickets with provided query string
 #   pivot comment <ticket id> <comments> - add internal comment to tickets, this won't be sent to submitter
 #   pivot translate <ticket id> - translate tickets into English if it's other in languages
-#   pivot leaderboard past <days> - return leaderboard show tickets grouped by assignees in past <days>
+#   pivot team-status past <days> - show tickets grouped by assignees in past <days>
 #   pivot introduce - pivot will introduce itself
 
 
@@ -134,7 +134,7 @@ group_tickets = (msg, results) ->
     zendesk_user msg, key, (user_json) ->
       name = user_json.user.name
       value = assigned_tickets[user_json.user.id]
-      msg.send "#{name}: #{value} tickets"
+      msg.send "#{name}: #{value} ticket(s)"
 
 # translate ticket comment to English
 google_translate = (msg, comment_id, message) ->
@@ -286,9 +286,9 @@ module.exports = (robot) ->
       for result in results.results
         msg.send "#{result.id}: #{result.subject}\n#{tickets_url}/#{result.id}\n"
 
-  # Return leaderboard show ticket grouped by assignees in past <days>
-  # leaderboard past <days>
-  robot.respond /leaderboard past ([\d]+)$/i, (msg) ->
+  # Return team-status show ticket grouped by assignees in past <days>
+  # team-status past <days>
+  robot.respond /team-status past ([\d]+)$/i, (msg) ->
     days = msg.match[1]
     if days <=0 || days > 90
       msg.send "Please input days between 0 and 91"
@@ -312,35 +312,35 @@ module.exports = (robot) ->
     zendesk_request_get msg, ticket_queries.unsolved, (results) ->
       ticket_count = results.count
       msg.send "There are #{ticket_count} unsolved tickets"
-      group_tickets msg, results.results
+      #group_tickets msg, results.results
 
   # pending tickets
   robot.respond /pending tickets$/i, (msg) ->
     zendesk_request_get msg, ticket_queries.pending, (results) ->
       ticket_count = results.count
       msg.send "There are #{ticket_count} pending tickets"
-      group_tickets msg, results.results
+      #group_tickets msg, results.results
 
   # new tickets
   robot.respond /new tickets$/i, (msg) ->
     zendesk_request_get msg, ticket_queries.new, (results) ->
       ticket_count = results.count
       msg.send "There are #{ticket_count} new tickets"
-      group_tickets msg, results.results
+      #group_tickets msg, results.results
 
   # escalated tickets
   robot.respond /escalated tickets$/i, (msg) ->
     zendesk_request_get msg, ticket_queries.escalated, (results) ->
       ticket_count = results.count
       msg.send "There are #{ticket_count} escalated tickets"
-      group_tickets msg, results.results
+      #group_tickets msg, results.results
 
   # open tickets
   robot.respond /open tickets$/i, (msg) ->
     zendesk_request_get msg, ticket_queries.open, (results) ->
       ticket_count = results.count
       msg.send "There are #{ticket_count} open tickets"
-      group_tickets msg, results.results
+      #group_tickets msg, results.results
 
   # list (all )?tickets
   robot.respond /list (all )?tickets$/i, (msg) ->
