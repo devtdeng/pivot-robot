@@ -22,6 +22,8 @@
 #   pivot search tickets <query> - search zendesk tickets with provided query string
 #   pivot comment <ticket id> <comments> - add internal comment to tickets, this won't be sent to submitter
 #   pivot translate <ticket id> - translate tickets into English if it's other in languages
+#   pivot leaderboard past <days> - return leaderboard show tickets grouped by assignees in past <days>
+
 
 # Ticket search
 # GET /api/v2/search.json?query={search_string}
@@ -35,6 +37,7 @@ ticket_queries =
   tickets: "tickets"
   users: "users"
   keyword: "search.json?query=subject:"
+  afterdate: "search.json?query=created>"
 
 # Article search
 # GET /api/v2/help_center/articles/search.json?query={search_string}
@@ -153,6 +156,12 @@ google_translate = (msg, comment_id, message) ->
           output = "\n ------#{comment_id}------- \nOriginal COMMENT:\n#{message}\n\n"
           output += "TRANSLATED TO:\n#{parsed_formatted}\n"
           msg.send output
+# 1 => 01, 5 => 05
+forceTwoDigits = (val) ->
+  if val < 10
+    return "0#{val}"
+  return val
+
 
 module.exports = (robot) ->
 
@@ -180,15 +189,6 @@ module.exports = (robot) ->
   #  catch error
   #    console.log('Unable to read file', error)
 
-
-  # TODO: return tickets and articles help to resolve the ticket
-  # suggest <ticket id>
-  robot.respond /suggest ([\d]+)$/i, (msg) ->
-    ticketid = msg.match[1]
-    msg.send "not implemented yet"
-    # step 1: get ticket title
-    # step 2: search articles
-    # step 3: search tickets (exclude this ticket)
 
   # Add internal comment to special ticket
   # comment <ticket id> <comment>
@@ -264,6 +264,27 @@ module.exports = (robot) ->
       for result in results.results
         msg.send "#{result.id}: #{result.subject}\n#{tickets_url}/#{result.id}\n"
 
+  # Return leaderboard show ticket grouped by assignees in past <days>
+  # leaderboard past <days>
+  robot.respond /leaderboard past ([\d]+)$/i, (msg) ->
+    days = msg.match[1]
+    if days <=0 || days > 90
+      msg.send "Please input days between 0 and 91"
+      return
+
+    date = new Date()
+    date = new Date(date.valueOf() - 1000 * 3600 * 24 * days)
+
+    year = date.getFullYear()
+    month = forceTwoDigits(date.getMonth()+1)
+    day = forceTwoDigits(date.getDate())
+
+    pastdate = date.getFullYear() + "-" + forceTwoDigits(date.getMonth()+1) + "-" + forceTwoDigits(date.getDate())
+    zendesk_request_get msg, "#{ticket_queries.afterdate}#{pastdate}", (results) ->
+      if results.count > 0
+        msg.send "#{results.count} tickets created in past #{days}"
+        group_tickets msg, results.results
+
   # (all )?tickets
   robot.respond /(all )?tickets$/i, (msg) ->
     zendesk_request_get msg, ticket_queries.unsolved, (results) ->
@@ -334,19 +355,14 @@ module.exports = (robot) ->
       for result in results.results
         msg.send "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id}  #{result.subject}"
 
-
   # introduce
   robot.respond /introduce$/i, (msg) ->
-  #  msg.http("http://pivot-hipchat.cfapps.io/ascii.txt")
-  #     .get() (err, res, body) ->
-  #       msg.send body
-    message =  "***************************************************\n"
+    message = "***************************************************\n"
     message += "I'm Pivot a.k.a PIVotal robOT and\n"
-    message += "I am at your service to get anything from zendesk\n"
+    message += "I am at your service to get anything from Zendesk\n"
+    message += "Please input help for detailed usage!\n"
     message += "***************************************************"
-
     msg.send message
-
 
   # Open ticket information if someone mentioned ticket #ticket_id in the chat room
   robot.hear /ticket #([\d]+)$/i, (msg) ->
@@ -363,7 +379,6 @@ module.exports = (robot) ->
       message += "\nSUBJECT: #{result.ticket.subject}"
 
       msg.send message
-
 
   #Welcome greeting on entry to support room
   robot.enter (msg) ->

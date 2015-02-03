@@ -49,7 +49,7 @@ checknewticket = ->
       # no new tickets, don't send message to chat room
       return
 
-    message = "There is #{results.count} new ticket(s)\n"
+    message = ""
     for result in results.results
       message += "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id} created at #{result.created_at}\n #{result.subject}\n"
     robot_global.messageRoom room, message
