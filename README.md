@@ -38,7 +38,7 @@ Ticket xxxx is open: https://<subdomain>.zendesk.com/tickets/xxxx
 - pivot search tickets <query> - search zendesk tickets with provided query string
 - pivot comment <ticket id> <comments> - add internal comment to tickets, this won't be sent to submitter
 - pivot translate <ticket id> - translate tickets into English if it's other in languages
-- pivot leaderboard past <days> - return leaderboard show tickets grouped by assignees in past <days>
+- pivot team-status past <days> - return leaderboard show tickets grouped by assignees in past <days>
 - pivot introduce - pivot will introduce itself
 
 ## Context commands and notifications
