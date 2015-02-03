@@ -23,6 +23,7 @@
 #   pivot comment <ticket id> <comments> - add internal comment to tickets, this won't be sent to submitter
 #   pivot translate <ticket id> - translate tickets into English if it's other in languages
 #   pivot leaderboard past <days> - return leaderboard show tickets grouped by assignees in past <days>
+#   pivot introduce - pivot will introduce itself
 
 
 # Ticket search
@@ -108,26 +109,33 @@ zendesk_user = (msg, user_id, user_json) ->
     user_json result
 
 # group tickets to users
+# group tickets to users
 group_tickets = (msg, results) ->
   if results.count <= 0
     return
 
   assigned_tickets = {}
+  unassinged = 0
   for result in results
-    assignee_id = result.assignee_id
-    if "#{assignee_id}" of assigned_tickets
-      assigned_tickets["#{assignee_id}"] += 1
+    if result.assignee_id?
+      assignee_id = result.assignee_id
+      if "#{assignee_id}" of assigned_tickets
+        assigned_tickets["#{assignee_id}"] += 1
+      else
+        assigned_tickets["#{assignee_id}"] = 1
     else
-      assigned_tickets["#{assignee_id}"] = 1
+      unassinged += 1
 
   # key: user_id, value: tickets number
   # TODO, send ticket number and link to chat
+  msg.send "unassigned: #{unassinged} tickets"
   for key, value of assigned_tickets
+    console.log "key = #{key}, value = #{value} in assigned_tickets"
     zendesk_user msg, key, (user_json) ->
       name = user_json.user.name
       value = assigned_tickets[user_json.user.id]
       msg.send "#{name}: #{value} tickets"
-
+      
 # translate ticket comment to English
 google_translate = (msg, comment_id, message) ->
   new_message = message.replace(/\n/g, "<return>")
@@ -360,7 +368,7 @@ module.exports = (robot) ->
     message = "***************************************************\n"
     message += "I'm Pivot a.k.a PIVotal robOT and\n"
     message += "I am at your service to get anything from Zendesk\n"
-    message += "Please input help for detailed usage!\n"
+    message += "Ask 'pivot help' for supported commands!\n"
     message += "***************************************************"
     msg.send message
 
