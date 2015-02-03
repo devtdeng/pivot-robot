@@ -96,15 +96,36 @@ zendesk_request_put = (msg, url, data, handler) ->
 
       handler content
 
-# implement this to find out the user or email to use while posting
-# internal message to tickets
-zendesk_user = (msg, user_id) ->
-  zendesk_request_get msg, "#{queries.users}/#{user_id}.json", (result) ->
+# get entire user info with user_id
+zendesk_user = (msg, user_id, user_json) ->
+  zendesk_request_get msg, "#{ticket_queries.users}/#{user_id}.json", (result) ->
     if result.error
       msg.send result.description
       return
-    result.user
+    user_json result
 
+# group tickets to users
+group_tickets = (msg, results) ->
+  if results.count <= 0
+    return
+
+  assigned_tickets = {}
+  for result in results
+    assignee_id = result.assignee_id
+    if "#{assignee_id}" of assigned_tickets
+      assigned_tickets["#{assignee_id}"] += 1
+    else
+      assigned_tickets["#{assignee_id}"] = 1
+
+  # key: user_id, value: tickets number
+  # TODO, send ticket number and link to chat
+  for key, value of assigned_tickets
+    zendesk_user msg, key, (user_json) ->
+      name = user_json.user.name
+      value = assigned_tickets[user_json.user.id]
+      msg.send "#{name}: #{value} tickets"
+
+# translate ticket comment to English
 google_translate = (msg, comment_id, message) ->
   new_message = message.replace(/\n/g, "<return>")
 
@@ -248,30 +269,35 @@ module.exports = (robot) ->
     zendesk_request_get msg, ticket_queries.unsolved, (results) ->
       ticket_count = results.count
       msg.send "There are #{ticket_count} unsolved tickets"
+      group_tickets msg, results.results
 
   # pending tickets
   robot.respond /pending tickets$/i, (msg) ->
     zendesk_request_get msg, ticket_queries.pending, (results) ->
       ticket_count = results.count
-      msg.send "There are #{ticket_count} unsolved tickets"
+      msg.send "There are #{ticket_count} pending tickets"
+      group_tickets msg, results.results
 
   # new tickets
   robot.respond /new tickets$/i, (msg) ->
     zendesk_request_get msg, ticket_queries.new, (results) ->
       ticket_count = results.count
       msg.send "There are #{ticket_count} new tickets"
+      group_tickets msg, results.results
 
   # escalated tickets
   robot.respond /escalated tickets$/i, (msg) ->
     zendesk_request_get msg, ticket_queries.escalated, (results) ->
       ticket_count = results.count
       msg.send "There are #{ticket_count} escalated tickets"
+      group_tickets msg, results.results
 
   # open tickets
   robot.respond /open tickets$/i, (msg) ->
     zendesk_request_get msg, ticket_queries.open, (results) ->
       ticket_count = results.count
       msg.send "There are #{ticket_count} open tickets"
+      group_tickets msg, results.results
 
   # list (all )?tickets
   robot.respond /list (all )?tickets$/i, (msg) ->
