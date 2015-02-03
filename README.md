@@ -8,7 +8,7 @@
 ## Deployment
 - $ git clone https://github.com/devtdeng/pivot.git
 - $ cd pivot
-- Configure hipchat/zendesk login manifest.yml with valid info
+- Configure hipchat/zendesk login in manifest.yml with valid information
 - $ cf login -a api.run.pivotal.io -u <user> -p <password> -o <org> -s <space>
 - $ cf push
 
