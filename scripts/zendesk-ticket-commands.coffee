@@ -156,14 +156,28 @@ google_translate = (msg, comment_id, message) ->
     .header('User-Agent', 'Mozilla/5.0')
     .get() (err, res, body) ->
       data = body
+
       if data.length > 4 and data[0] == '['
         parsed = eval(data)
-        parsed = parsed[0] and parsed[0][0] and parsed[0][0][0]
-        if parsed
-          parsed_formatted = parsed.replace(/<return>/g, "\n")
+
+        if parsed[2] == 'en'
+          return
+
+        # parsed = parsed[0] and parsed[0][0] and parsed[0][0][0]
+        parsed_message = ""
+        if parsed[0]
+          i = 0
+          while parsed[0][i]
+            if parsed[0][i][0]
+              parsed_message += parsed[0][i][0]
+            i += 1
+
+        if parsed_message
+          parsed_message = parsed_message.replace(/<return>/g, "\n")
           output = "\n ------#{comment_id}------- \nOriginal COMMENT:\n#{message}\n\n"
-          output += "TRANSLATED TO:\n#{parsed_formatted}\n"
+          output += "TRANSLATED TO:\n#{parsed_message}\n"
           msg.send output
+
 # 1 => 01, 5 => 05
 forceTwoDigits = (val) ->
   if val < 10
@@ -290,7 +304,7 @@ module.exports = (robot) ->
     pastdate = date.getFullYear() + "-" + forceTwoDigits(date.getMonth()+1) + "-" + forceTwoDigits(date.getDate())
     zendesk_request_get msg, "#{ticket_queries.afterdate}#{pastdate}", (results) ->
       if results.count > 0
-        msg.send "#{results.count} tickets created in past #{days}"
+        msg.send "#{results.count} tickets created in past #{days} days"
         group_tickets msg, results.results
 
   # (all )?tickets
