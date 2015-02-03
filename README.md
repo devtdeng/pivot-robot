@@ -43,7 +43,7 @@ Ticket xxxx is open: https://<subdomain>.zendesk.com/tickets/xxxx
 
 ## Context commands and notifications
 - Pivot will return the ticket link with some basic information if 'ticket #ticket_id' phrase is mentioned in the chat
-- Pivot will check every 1 minute for new tickets in Zendesk and message the room if there are any new tickets
+- Pivot will check for new tickets in Zendesk and message the room if there are any new tickets
 
 ## Technical details
 - Ready to deploy in [Pivotal Web Services](https://run.pivotal.io)(PWS)
