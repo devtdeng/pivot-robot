@@ -2,6 +2,7 @@
 
 ## What is it?
 - Pivot a.k.a PIVotal roBOT is a [Hubot](https://hubot.github.com/) powered chat bot
+- The name came from the fact that it started as a part of [Pivotal's](www.pivotal.io) internal Hackathon
 - Pivot is currently configured to work with HipChat using the [Hubot HipChat adapter] (https://github.com/hipchat/hubot-hipchat)
 - Pivot has different commands to interact with your configured [Zendesk] (https://www.zendesk.com/) instance 
 
