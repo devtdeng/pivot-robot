@@ -128,7 +128,7 @@ group_tickets = (msg, results) ->
 
   # key: user_id, value: tickets number
   # TODO, send ticket number and link to chat
-  msg.send "unassigned: #{unassinged} tickets"
+  msg.send "unassigned: #{unassinged} ticket(s)"
   for key, value of assigned_tickets
     console.log "key = #{key}, value = #{value} in assigned_tickets"
     zendesk_user msg, key, (user_json) ->

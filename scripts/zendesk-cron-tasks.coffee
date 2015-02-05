@@ -35,18 +35,15 @@ zendesk_request_get = (url, handler) ->
 module.exports = (robot) ->
   cronJob = require('cron').CronJob
   robot_global = robot
+  new cronJob("#{process.env.HUBOT_NEW_TICKET_CRON_EXPRESSION}", checkNewTicket, null, true)
 
-  # since the demo is lese than 3 minutes, set interval as 1 minute
-  # Will create new ticket during the demo
-  new cronJob('0 * * * * *', checknewticket, null, true)
-  # new cronJob('0 */5 * * * 1-5', checknewticket, null, true)
-
-checknewticket = ->
-  console.log 'checknewticket invoked'
+checkNewTicket = ->
+  console.log 'checkNewTicket invoked'
 
   zendesk_request_get "search.json?query=status:new+type:ticket", (results) ->
     if results.count < 1
-      # no new tickets, don't send message to chat room
+      #robot_global.messageRoom room, "no new ticket(s)"
+      # no new tickets, don't send message to chat room unless debugging
       return
 
     ticket_count = results.count

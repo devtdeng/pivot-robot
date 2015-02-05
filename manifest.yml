@@ -12,3 +12,5 @@ applications:
     HUBOT_ZENDESK_USER: zendesk_user
     HUBOT_ZENDESK_APITOKEN: zendesk_apitoken
     HUBOT_ZENDESK_SUBDOMAIN: zendesk_subdomain
+
+    HUBOT_NEW_TICKET_CRON_EXPRESSION: '0 */15 * * * *'
