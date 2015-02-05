@@ -386,6 +386,10 @@ module.exports = (robot) ->
     message += "******************************************************"
     msg.send message
 
+  # thanks
+  robot.respond /thanks$/i, (msg) ->
+    msg.send "My pleasure, #{msg.message.user.name}!"
+
   # Open ticket information if someone mentioned ticket #ticket_id in the chat room
   robot.hear /ticket #([\d]+)$/i, (msg) ->
     ticket_id = msg.match[1]
