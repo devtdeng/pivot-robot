@@ -4,7 +4,7 @@
 - Pivot a.k.a PIVotal roBOT is a [Hubot](https://hubot.github.com/) powered chat bot
 - The name came from the fact that it started as a part of [Pivotal's](http://www.pivotal.io) internal Hackathon
 - Pivot is currently configured to work with HipChat using the [Hubot HipChat adapter] (https://github.com/hipchat/hubot-hipchat)
-- Pivot has different commands to interact with your configured [Zendesk] (https://www.zendesk.com/) instance 
+- Pivot has different commands to interact with your configured [Zendesk] (https://www.zendesk.com/) instance
 
 ## Deployment
 - $ git clone https://github.com/devtdeng/pivot.git
@@ -44,7 +44,7 @@ Ticket xxxx is open: https://<subdomain>.zendesk.com/tickets/xxxx
 
 ## Context commands and notifications
 - Pivot will return the ticket link with some basic information if 'ticket #ticket_id' phrase is mentioned in the chat
-- Pivot will check for new tickets in Zendesk and message the room if there are any new tickets
+- Pivot will check for new tickets in Zendesk (currently every 15 minutes and configurable by HUBOT_NEW_TICKET_CRON_EXPRESSION) and message the room if there are any new tickets
 
 ## Technical details
 - Ready to deploy in [Pivotal Web Services](https://run.pivotal.io)(PWS)
