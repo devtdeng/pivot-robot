@@ -1,7 +1,16 @@
 
 tickets_url = "https://#{process.env.HUBOT_ZENDESK_SUBDOMAIN}.zendesk.com/tickets"
-room = "#{process.env.HUBOT_HIPCHAT_ROOMS}"
+rooms = "#{process.env.HUBOT_HIPCHAT_ROOMS}"
+console.log rooms
+roomlist = rooms.split(",")
+#for room in roomlist
+#  console.log room
+
 robot_global = null
+
+zendesk_message_rooms = (msg) ->
+  for room in roomlist
+    robot_global.messageRoom room, msg
 
 zendesk_request_get = (url, handler) ->
   zendesk_user = "#{process.env.HUBOT_ZENDESK_USER}"
@@ -17,7 +26,7 @@ zendesk_request_get = (url, handler) ->
     .headers(Authorization: "Basic #{auth}", Accept: "application/json")
       .get() (err, res, body) ->
         if err
-          robot_global.messageRoom room "Zendesk says: #{err}"
+          zendesk_message_rooms("Zendesk says: #{err}")
           return
 
         console.log "http response: #{body}"
@@ -25,9 +34,9 @@ zendesk_request_get = (url, handler) ->
 
         if content.error?
           if content.error?.title
-            robot_global.messageRoom room "Zendesk says: #{content.error.title}"
+            zendesk_message_rooms("Zendesk says: #{content.error.title}")
           else
-            robot_global.messageRoom room "Zendesk says: #{content.error}"
+            zendesk_message_rooms("Zendesk says: #{content.error}")
           return
 
         handler content
@@ -42,14 +51,16 @@ checkNewTicket = ->
 
   zendesk_request_get "search.json?query=status:new+type:ticket", (results) ->
     if results.count < 1
-      #robot_global.messageRoom room, "no new ticket(s)"
       # no new tickets, don't send message to chat room unless debugging
+      #zendesk_message_rooms("no new ticket(s)")
       return
 
     ticket_count = results.count
-    robot_global.messageRoom room, "Total of #{ticket_count} new ticket(s)"
+    message = "Total of #{ticket_count} new ticket(s)"
+    zendesk_message_rooms(message)
 
     message = ""
     for result in results.results
       message += "Ticket #{result.id} is #{result.status}: #{tickets_url}/#{result.id} created at #{result.created_at}\n #{result.subject}\n"
-    robot_global.messageRoom room, message
+
+    zendesk_message_rooms(message)
