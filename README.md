@@ -24,12 +24,12 @@ Ticket xxxx is open: https://<subdomain>.zendesk.com/tickets/xxxx
 ...
 ```
 ## Supported commands
-- pivot (all) tickets - returns the total count of all unsolved tickets. The 'all' keyword is optional.
+- pivot (all) tickets - returns the total count of all unsolved tickets. The 'all' keyword is optional
 - pivot new tickets - returns the count of all new (unassigned) tickets
 - pivot open tickets - returns the count of all open tickets
 - pivot escalated tickets - returns a count of tickets with escalated tag that are open or pending
 - pivot pending tickets - returns a count of tickets that are pending
-- pivot list (all) tickets - returns a list of all unsolved tickets. The 'all' keyword is optional.
+- pivot list (all) tickets - returns a list of all unsolved tickets. The 'all' keyword is optional
 - pivot list new tickets - returns a list of all new tickets
 - pivot list open tickets - returns a list of all open tickets
 - pivot list pending tickets - returns a list of pending tickets
