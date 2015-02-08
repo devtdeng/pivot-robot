@@ -47,11 +47,11 @@ Ticket xxxx is open: https://<subdomain>.zendesk.com/tickets/xxxx
 - Pivot will check for new tickets in Zendesk (currently every 15 minutes and configurable in manifest.yml) and message the room if there are any new tickets
 
 ## Technical details
-- Ready to deploy in [Pivotal Web Services](https://run.pivotal.io)(PWS)
+- Ready to deploy in [Pivotal Web Services](https://run.pivotal.io) (PWS)
 - Hubot scripts written in [CoffeScript](http://coffeescript.org)
 
 ## Future plans
-- Pivot will notify when a new ticket is cloe to resposne time limit
+- Pivot will notify when a new ticket is close to resposne time limit
 - Ticket sentiment analysis (see [this](https://github.com/samshull/sentiment-analysis) and [this](https://github.com/thisandagain/sentiment))
 - Pivot will return the official CVE advisory if the CVE number is mentioned in the chat
 - A command to check PWS status
