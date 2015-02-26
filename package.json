@@ -5,13 +5,14 @@
   "author": "devtdeng, shahid",
   "description": "A robot to work with ticket system",
   "dependencies": {
+    "cron": "^1.0.6",
     "hubot": "^2.11.0",
     "hubot-diagnostics": "0.0.1",
     "hubot-help": "^0.1.1",
-    "hubot-scripts": "^2.5.16",
     "hubot-hipchat": "^2.7.5",
-    "cron":"^1.0.6"
-    },
+    "hubot-scripts": "^2.5.16",
+    "hubot-slack": "^3.2.1"
+  },
   "engines": {
     "node": "0.10.x"
   }

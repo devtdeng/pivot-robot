@@ -5,6 +5,11 @@ applications:
   memory: 1G
   path: ./
   env:
+    HUBOT_ADAPTER: hubot_adapter
+
+    HUBOT_SLACK_TOKEN: hubot_slack_token
+    HUBOT_SLACK_ROOMS: slack_rooms
+
     HUBOT_HIPCHAT_JID: hipchat_jid
     HUBOT_HIPCHAT_PASSWORD: hipchat_password
     HUBOT_HIPCHAT_ROOMS: hipchat_rooms
@@ -13,4 +18,4 @@ applications:
     HUBOT_ZENDESK_APITOKEN: zendesk_apitoken
     HUBOT_ZENDESK_SUBDOMAIN: zendesk_subdomain
 
-    HUBOT_NEW_TICKET_CRON_EXPRESSION: '0 */15 * * * *'
+    HUBOT_NEW_TICKET_CRON_EXPRESSION: '0 */30 * * * *'

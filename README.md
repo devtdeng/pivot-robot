@@ -3,13 +3,14 @@
 ## What is it?
 - Pivot a.k.a PIVotal roBOT is a [Hubot](https://hubot.github.com/) powered chat bot
 - The name came from the fact that it started as a part of [Pivotal's](http://www.pivotal.io) internal Hackathon
-- Pivot is currently configured to work with HipChat using the [Hubot HipChat adapter] (https://github.com/hipchat/hubot-hipchat)
+- Pivot is currently configured to work with HipChat (using the [Hubot HipChat adapter] (https://github.com/hipchat/hubot-hipchat)) or Slack (using the [Hubot Slack adapter](https://github.com/slackhq/hubot-slack))
 - Pivot has different commands to interact with your configured [Zendesk] (https://www.zendesk.com/) instance
 
 ## Deployment
 - $ git clone https://github.com/devtdeng/pivot.git
 - $ cd pivot
-- Configure hipchat/zendesk login in manifest.yml with valid information
+- Configure either Slack or Hipchat information in manifest.yml based on which adapter you want to use
+- Configure Zendesk login information in manifest.yml
 - $ cf login -a api.run.pivotal.io -u <user> -p <password> -o <org> -s <space>
 - $ cf push
 
@@ -44,7 +45,7 @@ Ticket xxxx is open: https://<subdomain>.zendesk.com/tickets/xxxx
 
 ## Context commands and notifications
 - Pivot will return the ticket link with some basic information if 'ticket #ticket_id' phrase is mentioned in the chat
-- Pivot will check for new tickets in Zendesk (currently every 15 minutes and configurable in manifest.yml) and message the room if there are any new tickets
+- Pivot will check for new tickets in Zendesk (currently every 30 minutes and configurable in manifest.yml) and message the room if there are any new tickets
 
 ## Technical details
 - Ready to deploy in [Pivotal Web Services](https://run.pivotal.io) (PWS)

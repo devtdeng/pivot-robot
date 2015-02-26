@@ -408,6 +408,13 @@ module.exports = (robot) ->
 
   #Welcome greeting on entry to support room
   robot.enter (msg) ->
+    console.log "inside robot.enter"
     if robot.name != msg.message.user.name
-      message = "#{msg.message.user.name}, Welcome to support room"
-      robot.messageRoom process.env.HUBOT_HIPCHAT_ROOMS, message
+      console.log "inside logic for robot.enter"
+      message = "#{msg.message.user.name}, Welcome to the room"
+      console.log "room: #{msg.message.room}"
+
+      if "#{process.env.HUBOT_ADAPTER}" == "hipchat"
+        robot.messageRoom "#{msg.message.room}", message
+      else
+        robot.messageRoom "#{msg.message.room}", message

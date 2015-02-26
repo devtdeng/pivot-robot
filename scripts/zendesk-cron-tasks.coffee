@@ -1,6 +1,11 @@
 
 tickets_url = "https://#{process.env.HUBOT_ZENDESK_SUBDOMAIN}.zendesk.com/tickets"
-rooms = "#{process.env.HUBOT_HIPCHAT_ROOMS}"
+
+if "#{process.env.HUBOT_ADAPTER}" == "hipchat"
+  rooms = "#{process.env.HUBOT_HIPCHAT_ROOMS}"
+else
+  rooms = "#{process.env.HUBOT_SLACK_ROOMS}"
+
 console.log rooms
 roomlist = rooms.split(",")
 #for room in roomlist

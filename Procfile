@@ -1,1 +1,1 @@
-web: bin/hubot -a hipchat -n pivot
+web: bin/hubot -a $HUBOT_ADAPTER -n pivot
