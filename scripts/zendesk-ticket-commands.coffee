@@ -22,7 +22,7 @@
 #   pivot search tickets <query> - search zendesk tickets with provided query string
 #   pivot comment <ticket id> <comments> - add internal comment to tickets, this won't be sent to submitter
 #   pivot translate <ticket id> - translate tickets into English if it's other in languages
-#   pivot team-status past <days> - show tickets grouped by assignees in past <days>
+#   pivot team-status past <days> - show ticket numbers grouped by assignees in the past <days>
 #   pivot introduce - pivot will introduce itself
 
 
@@ -286,7 +286,7 @@ module.exports = (robot) ->
       for result in results.results
         msg.send "#{result.id}: #{result.subject}\n#{tickets_url}/#{result.id}\n"
 
-  # Return team-status show ticket grouped by assignees in past <days>
+  # Return team-status show ticket numbers grouped by assignees in the past <days>
   # team-status past <days>
   robot.respond /team-status past ([\d]+)$/i, (msg) ->
     days = msg.match[1]

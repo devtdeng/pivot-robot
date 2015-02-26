@@ -35,12 +35,12 @@ Ticket xxxx is open: https://<subdomain>.zendesk.com/tickets/xxxx
 - pivot list open tickets - returns a list of all open tickets
 - pivot list pending tickets - returns a list of pending tickets
 - pivot list escalated tickets - returns a list of escalated tickets
-- pivot ticket <ticket id> - returns information about the specified ticket with comments
-- pivot search articles <query> - search zendesk articles with provided query string
-- pivot search tickets <query> - search zendesk tickets with provided query string
-- pivot comment <ticket id> <comments> - add internal comment to tickets, this won't be sent to submitter
-- pivot translate <ticket id> - translate tickets into English if it's other in languages
-- pivot team-status past <days> - return leaderboard show tickets grouped by assignees in past <days>
+- pivot ticket `<ticket id>` - returns information about the specified ticket with comments
+- pivot search articles `<query>` - search zendesk articles with provided query string
+- pivot search tickets `<query>` - search zendesk tickets with provided query string
+- pivot comment `<ticket id>` `<comments>` - add internal comment to tickets, this won't be sent to the submitter
+- pivot translate `<ticket id>` - translate tickets into English if it's other in languages
+- pivot team-status past `<days>` - show ticket numbers grouped by assignees in the past `<days>`
 - pivot introduce - pivot will introduce itself
 
 ## Context commands and notifications
